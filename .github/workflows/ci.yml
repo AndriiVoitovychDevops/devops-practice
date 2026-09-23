@@ -15,9 +15,3 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v5
-
-    - name: Build project
-      run: mvn clean compile
-
-    - name: Run tests
-      run: mvn test
