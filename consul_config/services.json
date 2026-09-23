@@ -1,0 +1,36 @@
+{
+  "services": [
+    {
+      "id": "frontend-1",
+      "name": "frontend",
+      "tags": ["urlprefix-/"],
+      "address": "frontend",
+      "port": 8088,
+      "checks": [
+        {
+          "id": "frontend-check",
+          "name": "Frontend TCP Check",
+          "tcp": "frontend:8088",
+          "interval": "10s",
+          "timeout": "5s"
+        }
+      ]
+    },
+    {
+      "id": "backend-1",
+      "name": "backend",
+      "tags": ["urlprefix-/api strip=/api"],
+      "address": "backend",
+      "port": 8088,
+      "checks": [
+        {
+          "id": "backend-check",
+          "name": "Backend TCP Check",
+          "tcp": "backend:8088",
+          "interval": "10s",
+          "timeout": "5s"
+        }
+      ]
+    }
+  ]
+}

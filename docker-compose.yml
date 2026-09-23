@@ -1,14 +1,48 @@
+version: '3.8'
+
 services:
   frontend:
     build:
       context: ./frontend
     ports:
-      - "8081:80"
+      - "8081:8088"
     restart: always
 
   backend:
     build:
       context: ./backend
     ports:
-      - "8082:80"
+      - "8082:8088"
+    restart: always
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: devops_db
+      MYSQL_ROOT_PASSWORD: secretroot
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    restart: always
+
+  consul:
+    image: hashicorp/consul:latest
+    command: agent -server -ui -node=server-1 -bootstrap-expect=1 -client=0.0.0.0
+    volumes:
+      # Прокидаємо папку з налаштуваннями всередину контейнера Consul
+      - ./consul_config:/consul/config
+    ports:
+      - "8500:8500"
+    restart: always
+
+  fabio:
+    image: fabiolb/fabio
+    environment:
+      - FABIO_REGISTRY_CONSUL_ADDR=consul:8500
+    ports:
+      - "9999:9999"
+      - "9998:9998"
+    depends_on:
+      - consul
     restart: always
